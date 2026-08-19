@@ -1,0 +1,1993 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fiche technique de programmation</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<style>
+    /* ===== DESIGN MODERN INSPIRÉ D'ANKHOR.TOOLS ===== */
+    :root {
+        --primary: #2563eb;
+        --primary-light: #3b82f6;
+        --primary-dark: #1d4ed8;
+        --bg: #f8fafc;
+        --card: #ffffff;
+        --text: #0f172a;
+        --text-muted: #64748b;
+        --border: #e2e8f0;
+        --shadow: 0 4px 24px rgba(0,0,0,0.06);
+        --radius: 12px;
+        --radius-sm: 8px;
+        --transition: 0.2s ease;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+        background: var(--bg);
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        color: var(--text);
+        padding: 1.5rem;
+        line-height: 1.6;
+    }
+    .container { max-width: 1400px; margin: 0 auto; }
+
+    /* ===== HEADER ===== */
+    .doc-header {
+        background: var(--card);
+        border-radius: var(--radius) var(--radius) 0 0;
+        padding: 1.5rem 2rem;
+        box-shadow: var(--shadow);
+        border-bottom: 2px solid var(--border);
+    }
+    .dh-top {
+        display: flex;
+        gap: 1.5rem;
+        align-items: flex-start;
+        flex-wrap: wrap;
+    }
+    .dh-logo {
+        width: 56px;
+        height: 56px;
+        border-radius: var(--radius-sm);
+        background: linear-gradient(135deg, var(--primary), var(--primary-light));
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+        flex-shrink: 0;
+        box-shadow: 0 2px 8px rgba(37,99,235,0.3);
+    }
+    .dh-title { flex: 1; min-width: 200px; }
+    .dh-title .org {
+        font-size: 0.7rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        color: var(--text-muted);
+    }
+    .dh-title h1 {
+        font-size: 1.6rem;
+        font-weight: 700;
+        color: var(--text);
+        margin: 0.1rem 0;
+        letter-spacing: -0.02em;
+    }
+    .dh-title .projet {
+        font-size: 0.95rem;
+        color: var(--text-muted);
+    }
+    .dh-right {
+        text-align: right;
+        display: flex;
+        flex-direction: column;
+        gap: 0.2rem;
+    }
+    .dh-right .ficheId {
+        font-size: 1.6rem;
+        font-weight: 800;
+        color: var(--text);
+    }
+    .dh-right .room {
+        font-size: 1rem;
+        font-weight: 600;
+        color: var(--text-muted);
+    }
+    .badge-status {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        margin-top: 0.3rem;
+        background: #f1f5f9;
+        color: var(--text-muted);
+        padding: 0.25rem 1rem;
+        border-radius: 40px;
+        font-size: 0.8rem;
+        font-weight: 500;
+    }
+    .badge-status.final {
+        background: #dbeafe;
+        color: var(--primary);
+    }
+
+    /* ===== GRILLE MÉTADONNÉES ===== */
+    .id-grid-container {
+        margin-top: 1.2rem;
+        padding-top: 1.2rem;
+        border-top: 1px solid var(--border);
+    }
+    .id-grid-controls {
+        display: flex;
+        gap: 0.6rem;
+        margin-bottom: 0.8rem;
+        flex-wrap: wrap;
+        align-items: center;
+    }
+    .id-grid-controls button {
+        padding: 0.3rem 0.8rem;
+        border: 1px solid var(--border);
+        background: var(--card);
+        color: var(--text-muted);
+        border-radius: 30px;
+        cursor: pointer;
+        font-size: 0.75rem;
+        font-weight: 600;
+        transition: var(--transition);
+    }
+    .id-grid-controls button:hover {
+        background: #f1f5f9;
+    }
+    .id-grid-controls button.active {
+        background: var(--primary);
+        color: white;
+        border-color: var(--primary);
+    }
+    .id-grid {
+        display: grid;
+        gap: 0.6rem;
+        padding: 0.6rem;
+        border-radius: var(--radius-sm);
+        border: 2px dashed var(--border);
+        min-height: 60px;
+        background: #fafcff;
+    }
+    .id-grid.cols-2 { grid-template-columns: repeat(2, 1fr); }
+    .id-grid.cols-3 { grid-template-columns: repeat(3, 1fr); }
+    .id-grid.cols-4 { grid-template-columns: repeat(4, 1fr); }
+    .id-grid.cols-6 { grid-template-columns: repeat(6, 1fr); }
+    .id-cell {
+        font-size: 0.8rem;
+        padding: 0.3rem 0.7rem;
+        border-radius: var(--radius-sm);
+        background: white;
+        border: 1px solid var(--border);
+        display: flex;
+        align-items: center;
+        gap: 0.4rem;
+        cursor: move;
+        min-width: 120px;
+        transition: var(--transition);
+        box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+    }
+    .id-cell:hover {
+        border-color: var(--primary-light);
+        box-shadow: 0 2px 8px rgba(37,99,235,0.08);
+    }
+    .id-cell .drag-handle { color: #cbd5e1; font-size: 0.7rem; cursor: move; }
+    .id-cell .k {
+        font-size: 0.6rem;
+        text-transform: uppercase;
+        color: var(--text-muted);
+        font-weight: 700;
+        white-space: nowrap;
+        pointer-events: none;
+    }
+    .id-cell .v {
+        color: var(--text);
+        font-weight: 500;
+        white-space: nowrap;
+        pointer-events: none;
+        font-size: 0.75rem;
+    }
+    .id-cell .cell-actions { display: none; gap: 0.15rem; margin-left: auto; }
+    .id-cell:hover .cell-actions { display: flex; }
+    .id-cell .cell-actions button {
+        width: 18px; height: 18px; border: none; background: transparent; color: #94a3b8; cursor: pointer; border-radius: 4px; font-size: 0.55rem;
+    }
+    .id-cell .cell-actions button:hover { color: #ef4444; }
+
+    /* ===== IMAGE / COUVERTURE ===== */
+    .dh-image {
+        margin-top: 1.2rem;
+        padding-top: 1.2rem;
+        border-top: 1px solid var(--border);
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1.5rem;
+        align-items: flex-start;
+    }
+    .dh-image .img-placeholder {
+        width: 200px;
+        height: 150px;
+        border: 2px dashed var(--border);
+        border-radius: var(--radius-sm);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--text-muted);
+        font-size: 0.85rem;
+        background: #f8fafc;
+        overflow: hidden;
+        flex-shrink: 0;
+    }
+    .dh-image .img-placeholder img { width: 100%; height: 100%; object-fit: cover; }
+    .dh-image .img-controls {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        flex: 1;
+        min-width: 200px;
+    }
+    .dh-image .img-controls button {
+        background: var(--primary);
+        color: white;
+        border: none;
+        border-radius: 40px;
+        padding: 0.4rem 1.2rem;
+        font-size: 0.8rem;
+        cursor: pointer;
+        transition: var(--transition);
+        font-weight: 500;
+        align-self: flex-start;
+    }
+    .dh-image .img-controls button:hover {
+        background: var(--primary-dark);
+    }
+    .dh-image .cover-note-control {
+        display: flex;
+        flex-direction: column;
+        gap: 0.3rem;
+        margin-top: 0.5rem;
+        width: 100%;
+    }
+    .dh-image .cover-note-control label {
+        font-size: 0.8rem;
+        font-weight: 600;
+        color: var(--text);
+    }
+    .dh-image .cover-note-control textarea {
+        width: 100%;
+        padding: 0.5rem 0.7rem;
+        border: 1px solid var(--border);
+        border-radius: var(--radius-sm);
+        font-size: 0.8rem;
+        font-family: inherit;
+        resize: vertical;
+        min-height: 60px;
+        background: white;
+        transition: var(--transition);
+    }
+    .dh-image .cover-note-control textarea:focus {
+        outline: none;
+        border-color: var(--primary);
+        box-shadow: 0 0 0 3px rgba(37,99,235,0.1);
+    }
+
+    /* ===== TOOLBAR ===== */
+    .toolbar {
+        background: var(--card);
+        padding: 0.8rem 2rem;
+        display: flex;
+        gap: 0.8rem;
+        align-items: center;
+        flex-wrap: wrap;
+        border-bottom: 1px solid var(--border);
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    }
+    .search-box {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        background: #f1f5f9;
+        border: 1px solid var(--border);
+        border-radius: 40px;
+        padding: 0.4rem 1rem;
+        flex: 1;
+        min-width: 180px;
+        max-width: 280px;
+        transition: var(--transition);
+    }
+    .search-box:focus-within {
+        border-color: var(--primary);
+        box-shadow: 0 0 0 3px rgba(37,99,235,0.1);
+    }
+    .search-box input {
+        border: none;
+        background: transparent;
+        outline: none;
+        width: 100%;
+        font-size: 0.85rem;
+        font-family: inherit;
+        color: var(--text);
+    }
+    .tool-group {
+        display: flex;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+        margin-left: auto;
+        align-items: center;
+    }
+    .btn {
+        padding: 0.5rem 1.2rem;
+        border: none;
+        border-radius: 60px;
+        font-weight: 500;
+        font-size: 0.85rem;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-family: inherit;
+        transition: var(--transition);
+    }
+    .btn-primary {
+        background: var(--primary);
+        color: white;
+    }
+    .btn-primary:hover {
+        background: var(--primary-dark);
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(37,99,235,0.3);
+    }
+    .btn-success {
+        background: #10b981;
+        color: white;
+    }
+    .btn-success:hover {
+        background: #059669;
+    }
+    .btn-print {
+        background: #6366f1;
+        color: white;
+    }
+    .btn-print:hover {
+        background: #4f46e5;
+    }
+    .btn-ghost {
+        background: transparent;
+        color: var(--text-muted);
+        border: 1px solid var(--border);
+    }
+    .btn-ghost:hover {
+        background: #f1f5f9;
+    }
+    .btn-outline {
+        background: #f1f5f9;
+        color: var(--text-muted);
+        border: 1px solid var(--border);
+    }
+    .btn-outline:hover {
+        background: #e2e8f0;
+    }
+    .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    .margin-control, .gap-control {
+        display: flex;
+        align-items: center;
+        gap: 0.4rem;
+        font-size: 0.8rem;
+        color: var(--text-muted);
+    }
+    .margin-control label, .gap-control label { font-weight: 500; white-space: nowrap; }
+    .margin-control input, .gap-control input {
+        width: 65px;
+        padding: 0.2rem 0.4rem;
+        border: 1px solid var(--border);
+        border-radius: 30px;
+        font-size: 0.85rem;
+        text-align: center;
+        background: white;
+    }
+    .margin-control input:focus, .gap-control input:focus {
+        outline: none;
+        border-color: var(--primary);
+    }
+
+    .hint {
+        background: var(--card);
+        padding: 0.6rem 2rem;
+        border-bottom: 1px solid var(--border);
+        font-size: 0.82rem;
+        color: var(--text-muted);
+        display: flex;
+        gap: 0.6rem;
+        align-items: center;
+        flex-wrap: wrap;
+    }
+    .hint b { color: var(--text); font-weight: 600; }
+
+    /* ===== SECTIONS ===== */
+    .sections { display: flex; flex-direction: column; gap: 1.5rem; padding: 1.5rem 0; }
+    .section {
+        background: var(--card);
+        border-radius: var(--radius);
+        box-shadow: var(--shadow);
+        border: 1px solid var(--border);
+        overflow: hidden;
+        transition: var(--transition);
+    }
+    .section.dim { opacity: 0.5; }
+    .section-head {
+        display: flex;
+        align-items: center;
+        gap: 0.7rem;
+        padding: 0.7rem 1.5rem;
+        background: #f8fafc;
+        border-bottom: 1px solid var(--border);
+        flex-wrap: wrap;
+    }
+    .section-head .s-name {
+        font-size: 1.1rem;
+        font-weight: 700;
+        cursor: text;
+        border-radius: 6px;
+        padding: 0.1rem 0.6rem;
+        border: 1px dashed transparent;
+    }
+    .section-head .s-name:hover {
+        border-color: var(--border);
+        background: white;
+    }
+    .section-head .s-count {
+        background: #e2e8f0;
+        padding: 0.1rem 0.8rem;
+        border-radius: 40px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        color: var(--text-muted);
+    }
+    .section-tools {
+        margin-left: auto;
+        display: flex;
+        gap: 0.4rem;
+        align-items: center;
+        flex-wrap: wrap;
+    }
+    .section-tools button {
+        width: 32px; height: 32px;
+        border: none;
+        background: transparent;
+        color: var(--text-muted);
+        border-radius: var(--radius-sm);
+        cursor: pointer;
+        font-size: 0.8rem;
+        transition: var(--transition);
+    }
+    .section-tools button:hover {
+        background: rgba(0,0,0,0.05);
+        color: var(--text);
+    }
+    .section-tools .add-sub {
+        width: auto;
+        padding: 0 1rem;
+        font-weight: 600;
+        background: var(--primary);
+        color: white;
+        border-radius: 40px;
+        font-size: 0.8rem;
+    }
+    .section-tools .add-sub:hover {
+        background: var(--primary-dark);
+    }
+    .section-spacing {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.3rem;
+        font-size: 0.7rem;
+        color: var(--text-muted);
+        background: #f1f5f9;
+        padding: 0.1rem 0.6rem;
+        border-radius: 30px;
+    }
+    .section-spacing input {
+        width: 44px;
+        padding: 0.1rem 0.2rem;
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        font-size: 0.7rem;
+        text-align: center;
+        background: white;
+    }
+    .section-spacing label { font-size: 0.65rem; }
+    .section-tools .page-break-btn {
+        background: transparent;
+        border: 1px solid var(--border);
+        border-radius: 30px;
+        padding: 0 0.8rem;
+        font-size: 0.75rem;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.3rem;
+        cursor: pointer;
+        color: var(--text-muted);
+        height: 30px;
+        transition: var(--transition);
+    }
+    .section-tools .page-break-btn.active {
+        background: #fef9c3;
+        border-color: #facc15;
+        color: #854d0e;
+    }
+    .section-body {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 0.8rem;
+        padding: 1rem 1.2rem;
+    }
+
+    /* ===== SOUS-GROUPES ===== */
+    .subgroup {
+        background: #fafcff;
+        border: 1px solid var(--border);
+        border-radius: var(--radius-sm);
+        overflow: hidden;
+        transition: var(--transition);
+    }
+    .subgroup:hover {
+        border-color: var(--primary-light);
+        box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    }
+    .subgroup.span-1 { grid-column: span 1; }
+    .subgroup.span-2 { grid-column: span 2; }
+    .subgroup.span-3 { grid-column: span 3; }
+
+    .sub-head {
+        display: flex;
+        align-items: center;
+        gap: 0.6rem;
+        padding: 0.4rem 0.8rem;
+        background: #f1f5f9;
+        border-bottom: 1px solid var(--border);
+        flex-wrap: wrap;
+    }
+    .sub-head .sub-name {
+        font-size: 0.85rem;
+        font-weight: 700;
+        color: var(--text);
+        cursor: text;
+        border-radius: 5px;
+        padding: 0.05rem 0.5rem;
+        border: 1px dashed transparent;
+        flex: 1;
+        min-width: 60px;
+    }
+    .sub-head .sub-name:hover {
+        border-color: var(--border);
+        background: white;
+    }
+    .sub-tools {
+        display: flex;
+        gap: 0.3rem;
+        align-items: center;
+        flex-wrap: wrap;
+    }
+    .sub-tools .sub-span {
+        font-size: 0.65rem;
+        border: 1px solid var(--border);
+        border-radius: 20px;
+        background: white;
+        color: var(--text-muted);
+        padding: 0.05rem 0.5rem;
+        font-family: inherit;
+        cursor: pointer;
+    }
+    .sub-tools button {
+        width: 26px; height: 26px;
+        border: none;
+        background: transparent;
+        color: var(--text-muted);
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 0.75rem;
+        transition: var(--transition);
+    }
+    .sub-tools button:hover {
+        background: #e2e8f0;
+        color: var(--text);
+    }
+    .sub-move {
+        font-size: 0.65rem;
+        border: 1px solid var(--border);
+        border-radius: 20px;
+        background: white;
+        color: var(--text-muted);
+        padding: 0.05rem 0.5rem;
+        max-width: 100px;
+        font-family: inherit;
+        cursor: pointer;
+    }
+    .sub-spacing {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.3rem;
+        font-size: 0.65rem;
+        color: var(--text-muted);
+    }
+    .sub-spacing input {
+        width: 44px;
+        padding: 0.1rem 0.2rem;
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        font-size: 0.7rem;
+        text-align: center;
+        background: white;
+    }
+    .sub-spacing label { font-size: 0.65rem; }
+    .sub-tools .page-break-btn {
+        background: transparent;
+        border: 1px solid var(--border);
+        border-radius: 30px;
+        padding: 0 0.6rem;
+        font-size: 0.65rem;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.2rem;
+        cursor: pointer;
+        color: var(--text-muted);
+        height: 24px;
+        transition: var(--transition);
+    }
+    .sub-tools .page-break-btn.active {
+        background: #fef9c3;
+        border-color: #facc15;
+        color: #854d0e;
+    }
+
+    .fields { padding: 0.5rem 0.6rem; display: flex; flex-direction: column; gap: 0.25rem; min-height: 30px; }
+    .sub-foot { padding: 0 0.6rem 0.6rem; }
+    .add-field {
+        width: 100%;
+        border: 1px dashed var(--border);
+        background: transparent;
+        color: var(--text-muted);
+        border-radius: var(--radius-sm);
+        cursor: pointer;
+        font-weight: 500;
+        font-size: 0.75rem;
+        padding: 0.3rem;
+        font-family: inherit;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.3rem;
+        transition: var(--transition);
+    }
+    .add-field:hover {
+        border-color: var(--primary);
+        color: var(--primary);
+        background: rgba(37,99,235,0.04);
+    }
+
+    /* ===== CHAMPS ===== */
+    .field {
+        display: flex;
+        align-items: flex-start;
+        gap: 0.4rem;
+        padding: 0.3rem 0.5rem;
+        border-radius: var(--radius-sm);
+        border: 1px solid transparent;
+        background: white;
+        transition: var(--transition);
+    }
+    .field:hover {
+        border-color: var(--border);
+        background: #fafcff;
+    }
+    .field .fdrag { color: #cbd5e1; cursor: grab; font-size: 0.7rem; padding-top: 0.1rem; }
+    .field .fbody { flex: 1; min-width: 0; display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.15rem 0.4rem; }
+    .field .factions { display: flex; gap: 0.1rem; flex-shrink: 0; align-items: center; }
+    .field .factions .fmove {
+        font-size: 0.55rem;
+        border: 1px solid var(--border);
+        border-radius: 20px;
+        background: white;
+        color: var(--text-muted);
+        max-width: 80px;
+        padding: 0.05rem 0.2rem;
+        font-family: inherit;
+        cursor: pointer;
+    }
+    .field .factions button {
+        width: 20px; height: 20px;
+        border: none;
+        background: transparent;
+        color: #94a3b8;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 0.6rem;
+        transition: var(--transition);
+    }
+    .field .factions button:hover { color: #ef4444; }
+
+    .f-label {
+        font-size: 0.75rem;
+        color: var(--text);
+        font-weight: 600;
+        cursor: text;
+        border-radius: 5px;
+        border: 1px dashed transparent;
+        padding: 0 0.2rem;
+    }
+    .f-label:hover { border-color: var(--border); background: white; }
+    .f-value {
+        font-size: 0.7rem;
+        background: #f1f5f9;
+        color: var(--text);
+        font-weight: 500;
+        padding: 0.05rem 0.5rem;
+        border-radius: 40px;
+        cursor: text;
+        border: 1px solid transparent;
+        transition: var(--transition);
+    }
+    .f-value:hover { border-color: var(--border); background: white; }
+    .f-note-text {
+        font-size: 0.72rem;
+        color: var(--text-muted);
+        background: #f8fafc;
+        border: 1px dashed var(--border);
+        border-radius: var(--radius-sm);
+        padding: 0.2rem 0.5rem;
+        width: 100%;
+        cursor: text;
+        white-space: pre-wrap;
+        transition: var(--transition);
+    }
+    .f-note-text:hover { border-color: var(--primary-light); }
+    .chk {
+        background: none;
+        border: none;
+        cursor: pointer;
+        color: var(--text);
+        font-size: 0.85rem;
+        padding: 0;
+        line-height: 1;
+    }
+    .chk.off { color: #94a3b8; }
+    .qty-pill {
+        font-size: 0.7rem;
+        background: #f1f5f9;
+        color: var(--text);
+        font-weight: 600;
+        padding: 0.05rem 0.4rem;
+        border-radius: 40px;
+        cursor: text;
+        border: 1px solid transparent;
+    }
+    .qty-pill:hover { border-color: var(--border); background: white; }
+    .qty-unit { font-size: 0.65rem; color: var(--text-muted); }
+    .opt {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.2rem;
+        background: #f8fafc;
+        border: 1px solid var(--border);
+        border-radius: 30px;
+        padding: 0.05rem 0.4rem 0.05rem 0.25rem;
+    }
+    .opt .opt-label { font-size: 0.68rem; color: var(--text); cursor: text; }
+    .opt .opt-del {
+        border: none;
+        background: none;
+        color: #94a3b8;
+        cursor: pointer;
+        font-size: 0.5rem;
+    }
+    .opt .opt-del:hover { color: #ef4444; }
+    .add-opt {
+        font-size: 0.6rem;
+        border: 1px dashed var(--border);
+        background: white;
+        color: var(--text-muted);
+        border-radius: 30px;
+        padding: 0.05rem 0.4rem;
+        cursor: pointer;
+        font-family: inherit;
+        transition: var(--transition);
+    }
+    .add-opt:hover { border-color: var(--primary); color: var(--primary); }
+
+    .f-table { width: 100%; }
+    .f-table table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.68rem;
+        border: 1px solid var(--border);
+        border-radius: var(--radius-sm);
+        overflow: hidden;
+    }
+    .f-table th {
+        background: #f1f5f9;
+        text-align: left;
+        padding: 0.2rem 0.5rem;
+        border: 1px solid var(--border);
+        color: var(--text);
+        font-weight: 600;
+    }
+    .f-table td {
+        padding: 0.2rem 0.5rem;
+        border: 1px solid var(--border);
+        color: var(--text);
+        cursor: text;
+    }
+    .table-tools button {
+        font-size: 0.6rem;
+        border: 1px dashed var(--border);
+        background: transparent;
+        color: var(--text-muted);
+        border-radius: 20px;
+        padding: 0.1rem 0.5rem;
+        cursor: pointer;
+        font-family: inherit;
+        transition: var(--transition);
+    }
+    .table-tools button:hover { border-color: var(--primary); color: var(--primary); }
+
+    .empty-msg {
+        color: #94a3b8;
+        font-style: italic;
+        font-size: 0.7rem;
+        padding: 0.4rem;
+        text-align: center;
+        background: #f8fafc;
+        border-radius: 40px;
+        border: 1px dashed var(--border);
+    }
+
+    .inline-input, .inline-area {
+        font-family: inherit;
+        font-size: inherit;
+        border: 1px solid var(--primary);
+        border-radius: 6px;
+        padding: 0.1rem 0.4rem;
+        outline: none;
+        background: white;
+        color: var(--text);
+        box-shadow: 0 0 0 2px rgba(37,99,235,0.05);
+    }
+    .inline-area { width: 100%; min-height: 40px; resize: vertical; }
+
+    .add-section-btn {
+        width: 100%;
+        border: 2px dashed var(--border);
+        background: transparent;
+        color: var(--text-muted);
+        border-radius: var(--radius);
+        cursor: pointer;
+        font-weight: 600;
+        font-size: 1rem;
+        padding: 1.2rem;
+        font-family: inherit;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.6rem;
+        transition: var(--transition);
+    }
+    .add-section-btn:hover {
+        border-color: var(--primary);
+        color: var(--primary);
+        background: rgba(37,99,235,0.02);
+    }
+
+    /* ===== POP-OVER TYPE ===== */
+    .type-pop {
+        position: absolute;
+        z-index: 900;
+        background: white;
+        border: 1px solid var(--border);
+        border-radius: var(--radius-sm);
+        box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+        padding: 0.4rem;
+        min-width: 200px;
+    }
+    .type-pop button {
+        display: flex;
+        align-items: center;
+        gap: 0.7rem;
+        width: 100%;
+        text-align: left;
+        border: none;
+        background: transparent;
+        padding: 0.5rem 0.8rem;
+        border-radius: var(--radius-sm);
+        cursor: pointer;
+        font-size: 0.85rem;
+        color: var(--text);
+        font-family: inherit;
+        transition: var(--transition);
+    }
+    .type-pop button:hover { background: #f1f5f9; }
+
+    /* ===== TOAST ===== */
+    #toast {
+        position: fixed;
+        bottom: 25px;
+        left: 50%;
+        transform: translateX(-50%) translateY(20px);
+        background: #0f172a;
+        color: white;
+        padding: 0.7rem 1.5rem;
+        border-radius: 50px;
+        font-size: 0.88rem;
+        box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+        opacity: 0;
+        pointer-events: none;
+        transition: 0.25s ease;
+        z-index: 1000;
+        display: flex;
+        align-items: center;
+        gap: 0.6rem;
+    }
+    #toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+    #toast.err { background: #dc2626; }
+    #toast.ok { background: #10b981; }
+
+    /* ===== APERÇU FINAL ===== */
+    .final {
+        display: none;
+        background: var(--card);
+        border-radius: var(--radius);
+        padding: 1.5rem;
+        margin: 1rem 0;
+        box-shadow: var(--shadow);
+    }
+    .final.active { display: block; }
+
+    .fx-cover {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        min-height: 70vh;
+        text-align: center;
+        border-bottom: 2px dashed var(--border);
+        margin-bottom: 1.5rem;
+        background: #fafcff;
+        border-radius: var(--radius);
+        padding: 1rem;
+    }
+    .fx-cover .cover-title {
+        font-size: 2rem;
+        font-weight: 700;
+        color: var(--text);
+        margin-bottom: 0.3rem;
+    }
+    .fx-cover .cover-sub {
+        font-size: 1.1rem;
+        font-weight: 400;
+        color: var(--text-muted);
+        margin-bottom: 0.8rem;
+    }
+    .fx-cover .cover-image {
+        max-width: 70%;
+        max-height: 55vh;
+        width: auto;
+        height: auto;
+        border-radius: var(--radius-sm);
+        border: 1px solid var(--border);
+        margin: 0.3rem auto;
+        object-fit: contain;
+    }
+    .cover-note {
+        font-size: 0.7rem;
+        color: var(--text-muted);
+        text-align: center;
+        margin-top: 1rem;
+        padding: 0 1rem;
+        max-width: 80%;
+        line-height: 1.4;
+    }
+
+    .print-header { display: none !important; }
+    .fx-content { padding-top: 0.2rem; }
+    .fx-section {
+        border: 1px solid var(--border);
+        border-radius: var(--radius-sm);
+        margin-bottom: 0.8rem;
+        overflow: visible;
+    }
+    .fx-section > h3 {
+        background: #f1f5f9;
+        color: var(--text);
+        padding: 0.4rem 0.8rem;
+        font-size: 0.95rem;
+        font-weight: 700;
+        border-bottom: 1px solid var(--border);
+    }
+    .fx-body {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 0.4rem;
+        padding: 0.5rem;
+    }
+    .fx-body .fx-sub {
+        margin: 0;
+        border: 1px solid var(--border);
+        border-radius: var(--radius-sm);
+        overflow: hidden;
+        background: white;
+    }
+    .fx-body .fx-sub.span-1 { grid-column: span 1; }
+    .fx-body .fx-sub.span-2 { grid-column: span 2; }
+    .fx-body .fx-sub.span-3 { grid-column: span 3; }
+    .fx-sub h4 {
+        font-size: 0.75rem;
+        color: var(--text);
+        background: #f8fafc;
+        padding: 0.25rem 0.5rem;
+        border-bottom: 1px solid var(--border);
+        margin-bottom: 0;
+        font-weight: 700;
+    }
+    .fx-sub .fx-sub-content { padding: 0.25rem 0.5rem; }
+    .fx-line {
+        font-size: 0.65rem;
+        color: var(--text);
+        padding: 0.06rem 0;
+        line-height: 1.3;
+    }
+    .fx-line .k { color: var(--text-muted); font-weight: 600; }
+    .fx-line .v { font-weight: 500; color: var(--text); }
+    .fx-note {
+        font-size: 0.65rem;
+        color: var(--text-muted);
+        font-style: italic;
+        padding: 0.06rem 0;
+        line-height: 1.3;
+    }
+    .fx-table table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.6rem;
+        border: 1px solid var(--border);
+    }
+    .fx-table th, .fx-table td {
+        border: 1px solid var(--border);
+        padding: 0.15rem 0.3rem;
+        text-align: left;
+    }
+    .fx-table th {
+        background: #f1f5f9;
+        color: var(--text);
+        font-weight: 600;
+    }
+
+    /* ===== IMPRESSION ===== */
+    @media print {
+        * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+        body { background: white !important; padding: 0 !important; margin: 0 !important; font-size: 7pt !important; line-height: 1.2 !important; padding-top: var(--print-margin-top, 2.5cm) !important; }
+        .no-print { display: none !important; }
+        .final { display: block !important; box-shadow: none !important; padding: 0.1in !important; margin: 0 !important; padding-top: 0 !important; }
+        .sections, .add-section-btn { display: none !important; }
+        .print-header {
+            display: block !important;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            border-bottom: 1px solid #ccc;
+            padding: 0.1cm 0.2cm;
+            z-index: 1000;
+            font-size: 0.6rem;
+        }
+        .print-header .ph-top {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.7rem;
+            font-weight: 700;
+            color: #0f172a;
+        }
+        .print-header .ph-left { line-height: 1.2; }
+        .print-header .ph-right { text-align: right; line-height: 1.2; }
+        .print-header .ph-meta {
+            margin-top: 0.1rem;
+            font-size: 0.5rem;
+            color: #64748b;
+        }
+        .fx-content { margin-top: 0; }
+        .fx-cover {
+            page-break-after: always;
+            min-height: 80vh !important;
+            padding: 0.3rem !important;
+            margin: 0 !important;
+            border-bottom: 1px solid #ccc;
+            background: white !important;
+        }
+        .fx-cover .cover-title { font-size: 1.5rem; }
+        .fx-cover .cover-sub { font-size: 0.9rem; }
+        .fx-cover .cover-image {
+            max-width: 65% !important;
+            max-height: 60vh !important;
+            width: auto !important;
+            height: auto !important;
+            margin: 0.3rem auto !important;
+        }
+        .cover-note {
+            font-size: 0.55rem !important;
+            margin-top: 0.8rem !important;
+            max-width: 90% !important;
+            color: #64748b !important;
+        }
+        .fx-section {
+            border: 1px solid #ddd;
+            margin-bottom: 0.2rem;
+            break-inside: auto;
+            page-break-inside: auto;
+            display: block;
+            width: 100%;
+        }
+        .fx-section.break-before { page-break-before: always; break-before: page; }
+        .fx-section > h3 { background: #f1f5f9 !important; color: #0f172a !important; padding: 0.15rem 0.4rem; font-size: 0.7rem; font-weight: 700; break-inside: avoid; page-break-inside: avoid; break-after: avoid; page-break-after: avoid; margin: 0; display: block; }
+        .fx-body {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.15rem;
+            padding: 0.15rem;
+            margin: 0;
+        }
+        .fx-body .fx-sub {
+            break-inside: avoid !important;
+            page-break-inside: avoid !important;
+            margin: 0 !important;
+            border: 1px solid #ccc !important;
+            border-radius: 3px !important;
+            background: white !important;
+            overflow: hidden !important;
+            display: block !important;
+        }
+        .fx-body .fx-sub.break-before { page-break-before: always; break-before: page; }
+        .fx-body .fx-sub.span-1 { grid-column: span 1 !important; }
+        .fx-body .fx-sub.span-2 { grid-column: span 2 !important; }
+        .fx-body .fx-sub.span-3 { grid-column: span 3 !important; }
+        .fx-sub h4 { font-size: 0.6rem !important; color: #0f172a !important; background: #f8fafc !important; padding: 0.12rem 0.35rem !important; border-bottom: 1px solid #ddd !important; margin: 0 !important; font-weight: 700 !important; break-inside: avoid !important; page-break-inside: avoid !important; break-after: avoid !important; page-break-after: avoid !important; display: block !important; }
+        .fx-sub .fx-sub-content { padding: 0.12rem 0.35rem !important; display: block !important; }
+        .fx-line, .fx-note { font-size: 0.5rem !important; line-height: 1.1 !important; padding: 0.03rem 0 !important; }
+        .fx-table { break-inside: avoid !important; page-break-inside: avoid !important; }
+        .fx-table table { font-size: 0.45rem !important; width: 100% !important; border-collapse: collapse !important; }
+        .fx-table th, .fx-table td { padding: 0.08rem 0.15rem !important; border: 1px solid #ddd !important; }
+        .fx-table th { background: #f1f5f9 !important; color: #0f172a !important; font-weight: 600 !important; }
+    }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 720px) {
+        body { padding: 0.6rem; }
+        .section-body, .fx-body { grid-template-columns: 1fr; }
+        .subgroup.span-2, .subgroup.span-3 { grid-column: span 1; }
+        .fx-body .fx-sub.span-2, .fx-body .fx-sub.span-3 { grid-column: span 1; }
+        .id-grid.cols-3, .id-grid.cols-4, .id-grid.cols-6 { grid-template-columns: repeat(2, 1fr); }
+        .toolbar .margin-control input, .gap-control input { width: 55px; }
+        .sub-spacing input, .section-spacing input { width: 38px; }
+        .dh-image .cover-note-control textarea { min-height: 50px; }
+        .dh-top { flex-direction: column; align-items: stretch; }
+        .dh-right { text-align: left; }
+    }
+</style>
+</head>
+<body>
+<div class="container">
+    <!-- HEADER -->
+    <div class="doc-header no-print">
+        <div class="dh-top">
+            <div class="dh-logo"><i class="fas fa-hospital"></i></div>
+            <div class="dh-title">
+                <span class="org edit-tag" id="hOrg"></span>
+                <h1><span class="edit-tag" id="hTitle"></span></h1>
+                <div class="projet edit-tag" id="hProjet"></div>
+            </div>
+            <div class="dh-right">
+                <div class="ficheId edit-tag" id="hFicheId"></div>
+                <div class="room edit-tag" id="hRoom"></div>
+                <div><span class="badge-status" id="statusBadge"><i class="fas fa-pencil-alt"></i> Édition</span></div>
+            </div>
+        </div>
+        <div class="id-grid-container">
+            <div class="id-grid-controls">
+                <span style="font-size:0.75rem;color:#888;">Colonnes:</span>
+                <button class="grid-btn active" data-cols="2">2</button>
+                <button class="grid-btn" data-cols="3">3</button>
+                <button class="grid-btn" data-cols="4">4</button>
+                <button class="grid-btn" data-cols="6">6</button>
+                <button id="addMetaBtn"><i class="fas fa-plus"></i> Paramètre</button>
+                <span style="font-size:0.7rem;color:#888;margin-left:auto;"><i class="fas fa-info-circle"></i> Glissez pour réorganiser</span>
+            </div>
+            <div class="id-grid cols-3" id="idGrid"></div>
+        </div>
+        <div class="dh-image no-print" id="imageZone">
+            <div class="img-placeholder" id="imgPlaceholder">
+                <span id="imgEmptyMsg"><i class="fas fa-image"></i> Aucune image</span>
+                <img id="imgPreview" style="display:none;" alt="Image" />
+            </div>
+            <div class="img-controls">
+                <button id="uploadImageBtn"><i class="fas fa-upload"></i> Charger une image</button>
+                <button id="removeImageBtn" class="del-img" style="display:none;"><i class="fas fa-trash-alt"></i> Supprimer</button>
+                <div class="cover-note-control">
+                    <label for="coverNoteInput"><i class="fas fa-pen"></i> Note de bas de couverture</label>
+                    <textarea id="coverNoteInput" rows="3">Ce dessin est présenté à titre indicatif uniquement. Il constitue une base de réflexion interne et ne doit pas être interprété comme un document définitif pour les projets en cours.</textarea>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- TOOLBAR -->
+    <div class="toolbar no-print" id="mainToolbar">
+        <div class="search-box"><i class="fas fa-search"></i><input type="text" id="searchInput" placeholder="Rechercher…" autocomplete="off"></div>
+        <div class="tool-group">
+            <button class="btn btn-primary" id="saveBtn"><i class="fas fa-download"></i> Enregistrer</button>
+            <button class="btn btn-ghost" id="loadBtn"><i class="fas fa-folder-open"></i> Charger</button>
+            <button class="btn btn-ghost" id="newBtn"><i class="fas fa-file"></i> Nouveau</button>
+            <button class="btn btn-success" id="finalizeBtn"><i class="fas fa-check-circle"></i> Aperçu</button>
+            <button class="btn btn-print" id="printBtn" style="display:none;"><i class="fas fa-file-pdf"></i> PDF</button>
+            <button class="btn btn-outline" id="exampleBtn"><i class="fas fa-undo-alt"></i> Exemple</button>
+            <button class="btn btn-ghost" id="undoBtn"><i class="fas fa-undo"></i></button>
+            <button class="btn btn-ghost" id="redoBtn"><i class="fas fa-redo"></i></button>
+            <!-- Réglages de marges globales -->
+            <div class="margin-control">
+                <label for="printMargin"><i class="fas fa-arrows-alt-v"></i> Marge page</label>
+                <input type="number" id="printMargin" value="2.5" step="0.1" min="0" max="5"> cm
+            </div>
+            <div class="margin-control">
+                <label for="coverTop"><i class="fas fa-image"></i> Couv. haut</label>
+                <input type="number" id="coverTop" value="0.8" step="0.1" min="0" max="5"> cm
+            </div>
+            <div class="margin-control">
+                <label for="coverBottom">Couv. bas</label>
+                <input type="number" id="coverBottom" value="0.3" step="0.1" min="0" max="5"> cm
+            </div>
+            <div class="margin-control">
+                <label for="globalSecTop"><i class="fas fa-layer-group"></i> Sec. haut</label>
+                <input type="number" id="globalSecTop" value="0.0" step="0.1" min="0" max="3"> cm
+            </div>
+            <div class="margin-control">
+                <label for="globalSecBottom">Sec. bas</label>
+                <input type="number" id="globalSecBottom" value="0.3" step="0.1" min="0" max="3"> cm
+            </div>
+            <div class="margin-control">
+                <label for="globalSubTop"><i class="fas fa-list-ul"></i> Sub. haut</label>
+                <input type="number" id="globalSubTop" value="0.0" step="0.1" min="0" max="3"> cm
+            </div>
+            <div class="margin-control">
+                <label for="globalSubBottom">Sub. bas</label>
+                <input type="number" id="globalSubBottom" value="0.2" step="0.1" min="0" max="3"> cm
+            </div>
+        </div>
+        <input type="file" id="fileInput" accept="application/json,.json" style="display:none;">
+        <input type="file" id="imageInput" accept="image/*" style="display:none;">
+    </div>
+
+    <div class="hint no-print"><i class="fas fa-info-circle"></i><span>💡 Cliquez pour modifier · Glissez pour réorganiser · Le bouton <b>⏏️</b> force un saut de page avant le bloc.</span></div>
+
+    <!-- SECTIONS -->
+    <div id="sectionsWrap" class="sections"></div>
+    <button class="add-section-btn no-print" id="addSectionBtn"><i class="fas fa-plus"></i> Ajouter une section</button>
+
+    <!-- APERÇU FINAL -->
+    <div class="final" id="finalView"></div>
+</div>
+<div id="toast"></div>
+
+<script>
+(function(){
+"use strict";
+
+// ====== FONCTIONS DE BASE ======
+let _uid=0;
+const uid=(p)=>(p||"x")+(++_uid)+Math.random().toString(36).slice(2,6);
+
+const F = {
+    text: (l,v) => ({ id: uid("f"), type: "text", label: l, value: v||"" }),
+    check: (l,c) => ({ id: uid("f"), type: "check", label: l, checked: !!c }),
+    qty: (l,c,q,n,u) => ({ id: uid("f"), type: "qty", label: l, checked: !!c, qty: (q!=null?String(q):""), unit: u||"Qté", note: n||"" }),
+    choice: (l,o) => ({ id: uid("f"), type: "choice", label: l, options: (o||[]).map(x=>({label:x[0], checked:!!x[1]})) }),
+    note: (l,t) => ({ id: uid("f"), type: "note", label: l, text: t||"" }),
+    table: (c,r) => ({ id: uid("f"), type: "table", label: "", columns: c.slice(), rows: (r||[]).map(x=>x.slice()) })
+};
+const SG = (n,f,s,mt,mb,pgBreak) => ({ 
+    id: uid("s"), 
+    name: n, 
+    fields: f||[], 
+    span: s||1,
+    marginTop: mt || 0,
+    marginBottom: mb || 0,
+    pageBreakBefore: !!pgBreak
+});
+const SEC = (n,s,mt,mb,pgBreak) => ({ 
+    id: uid("S"), 
+    name: n, 
+    subgroups: s||[],
+    marginTop: mt || 0,
+    marginBottom: mb || 0,
+    pageBreakBefore: !!pgBreak
+});
+
+// ====== GABARIT PAR DÉFAUT AVEC "Local" et "Codification" ======
+function buildExample(){
+return {
+  "version": 11,
+  "meta": {
+    "org": "MSDL",
+    "title": "Fiche technique de programmation",
+    "projet": "HÔPITAL",
+    "ficheId": "Codification",
+    "room": "Local",
+    "gridCols": 3,
+    "id": [
+      { "k": "Révision", "v": "0" },
+      { "k": "Date", "v": new Date().getFullYear()+"-"+String(new Date().getMonth()+1).padStart(2,"0")+"-"+String(new Date().getDate()).padStart(2,"0")+" "+String(new Date().getHours()).padStart(2,"0")+":"+String(new Date().getMinutes()).padStart(2,"0") },
+      { "k": "Modifié par", "v": "M.Manseur" }
+    ],
+    "image": "",
+    "coverMarginTop": 0,
+    "coverMarginBottom": 0,
+    "globalSecTop": 0,
+    "globalSecBottom": 0,
+    "globalSubTop": 0,
+    "globalSubBottom": 0,
+    "coverNote": "Ce dessin est présenté à titre indicatif uniquement. Il constitue une base de réflexion interne et ne doit pas être interprété comme un document définitif pour les projets en cours."
+  },
+  "sections": [
+    {
+      "id": "S25sszj",
+      "name": "Fonctionnalité",
+      "subgroups": [
+        {
+          "id": "s65xtj",
+          "name": "Général",
+          "fields": [
+            { "id": "f1t2yk", "type": "text", "label": "Nb occupants", "value": "3 à 6" },
+            { "id": "f29td3", "type": "text", "label": "Nb postes de travail", "value": "0 bureau / 0 labo" },
+            { "id": "f3e9do", "type": "choice", "label": "Horaire typique", "options": [ { "label": "6h à 23h / 5 jours", "checked": false }, { "label": "24h/24h / 7 jours", "checked": true }, { "label": "Autre", "checked": false } ] },
+            { "id": "f4dltq", "type": "choice", "label": "Usage", "options": [ { "label": "Public", "checked": false }, { "label": "Clinique", "checked": true }, { "label": "Personnel", "checked": false }, { "label": "Logistique", "checked": false } ] },
+            { "id": "f51yir", "type": "choice", "label": "Type d'espace", "options": [ { "label": "Fermé", "checked": true }, { "label": "Ouvert", "checked": false }, { "label": "Semi-ouvert", "checked": false } ] }
+          ],
+          "span": 2,
+          "marginTop": 0,
+          "marginBottom": 0.2,
+          "pageBreakBefore": false
+        },
+        {
+          "id": "s12rvk9",
+          "name": "Accès spécial",
+          "fields": [
+            { "id": "f7j81n", "type": "check", "label": "N/A", "checked": true },
+            { "id": "f81eot", "type": "check", "label": "De l'extérieur", "checked": false },
+            { "id": "f9ipkf", "type": "check", "label": "Via corridor de service", "checked": false },
+            { "id": "f102t4n", "type": "check", "label": "Contrôlé", "checked": false },
+            { "id": "f11d5xd", "type": "check", "label": "Contrôle d'accès électrifié", "checked": false }
+          ],
+          "span": 1,
+          "marginTop": 0,
+          "marginBottom": 0.2,
+          "pageBreakBefore": false
+        },
+        {
+          "id": "s14ycfd",
+          "name": "Description des activités",
+          "fields": [
+            { "id": "f13iq4v", "type": "note", "label": "", "text": "Un local fermé qui sert aux activités de soins et d'hospitalisation de courte durée." }
+          ],
+          "span": 3,
+          "marginTop": 0.2,
+          "marginBottom": 0.2,
+          "pageBreakBefore": false
+        },
+        {
+          "id": "s22dfkq",
+          "name": "Considérations et classifications",
+          "fields": [
+            { "id": "f15yeaz", "type": "check", "label": "N/A", "checked": true },
+            { "id": "f163s52", "type": "check", "label": "Produits dangereux", "checked": false },
+            { "id": "f17orrn", "type": "check", "label": "Radiation", "checked": false },
+            { "id": "f18pdzs", "type": "check", "label": "Considérations électromagnétiques", "checked": false },
+            { "id": "f191yw6", "type": "check", "label": "Milieu stérile", "checked": false },
+            { "id": "f201ohl", "type": "check", "label": "Milieu infectieux", "checked": false },
+            { "id": "f21dnyi", "type": "check", "label": "Sensible aux vibrations", "checked": false }
+          ],
+          "span": 2,
+          "marginTop": 0,
+          "marginBottom": 0.2,
+          "pageBreakBefore": false
+        },
+        {
+          "id": "s24gdlz",
+          "name": "Adjacence / Proximité",
+          "fields": [
+            { "id": "f23i2sr", "type": "note", "label": "", "text": "Salle d'eau, PLM, alcôve EPI." }
+          ],
+          "span": 1,
+          "marginTop": 0.2,
+          "marginBottom": 0,
+          "pageBreakBefore": false
+        }
+      ],
+      "marginTop": 2.7,
+      "marginBottom": 0,
+      "pageBreakBefore": false
+    },
+    {
+      "id": "S44tm9x",
+      "name": "Exigences architecturales",
+      "subgroups": [
+        {
+          "id": "s29qgw3",
+          "name": "Dimensions critiques",
+          "fields": [
+            { "id": "f264wxt", "type": "text", "label": "Longueur", "value": "0 mm" },
+            { "id": "f27lna7", "type": "text", "label": "Largeur", "value": "0 mm" },
+            { "id": "f28sxu3", "type": "text", "label": "Hauteur libre", "value": "2400 mm" }
+          ],
+          "span": 1,
+          "marginTop": 0,
+          "marginBottom": 0.2,
+          "pageBreakBefore": false
+        },
+        {
+          "id": "s33ii0b",
+          "name": "Acoustique",
+          "fields": [
+            { "id": "f30g8bj", "type": "text", "label": "Insonorisation", "value": "45 ITS" },
+            { "id": "f31lwpv", "type": "text", "label": "Niveau de bruit", "value": "30 NC" },
+            { "id": "f321lq6", "type": "check", "label": "Traitement acoustique spécial", "checked": false }
+          ],
+          "span": 1,
+          "marginTop": 0,
+          "marginBottom": 0.2,
+          "pageBreakBefore": false
+        },
+        {
+          "id": "s38tyze",
+          "name": "Fenestration intérieure",
+          "fields": [
+            { "id": "f34jhhd", "type": "check", "label": "N/A", "checked": true },
+            { "id": "f35007o", "type": "check", "label": "Avec corridor", "checked": false },
+            { "id": "f36qxx6", "type": "check", "label": "Avec pièce adjacente", "checked": false },
+            { "id": "f37johi", "type": "check", "label": "Avec SAS", "checked": false }
+          ],
+          "span": 1,
+          "marginTop": 0,
+          "marginBottom": 0.2,
+          "pageBreakBefore": false
+        },
+        {
+          "id": "s435466",
+          "name": "Fenestration extérieure",
+          "fields": [
+            { "id": "f3925jd", "type": "check", "label": "Requise", "checked": true },
+            { "id": "f40xqmw", "type": "check", "label": "Souhaitable", "checked": false },
+            { "id": "f41bel4", "type": "check", "label": "Obscurité totale requise", "checked": false },
+            { "id": "f424ozd", "type": "qty", "label": "Store intégré", "checked": true, "qty": "", "unit": "Qté", "note": "Manuel" }
+          ],
+          "span": 3,
+          "marginTop": 0,
+          "marginBottom": 0,
+          "pageBreakBefore": false
+        }
+      ],
+      "marginTop": 0,
+      "marginBottom": 0,
+      "pageBreakBefore": false
+    },
+    {
+      "id": "S59cfrp",
+      "name": "Portes",
+      "subgroups": [
+        {
+          "id": "s50ah2i",
+          "name": "Portes battantes intérieures",
+          "fields": [
+            { "id": "f45dpq4", "type": "qty", "label": "Quantité", "checked": true, "qty": "1", "unit": "Qté", "note": "" },
+            { "id": "f46tpux", "type": "check", "label": "Simple", "checked": true },
+            { "id": "f471kb5", "type": "check", "label": "Double", "checked": false },
+            { "id": "f481gns", "type": "check", "label": "Avec vitrage", "checked": false },
+            { "id": "f4916iy", "type": "check", "label": "Insonorisée ITS", "checked": false }
+          ],
+          "span": 1,
+          "marginTop": 0,
+          "marginBottom": 0.2,
+          "pageBreakBefore": false
+        },
+        {
+          "id": "s539rrd",
+          "name": "Caractéristiques portes et cadres",
+          "fields": [
+            { "id": "f51sdyc", "type": "choice", "label": "Largeur totale (mm)", "options": [ { "label": "915", "checked": false }, { "label": "1070", "checked": false }, { "label": "1220", "checked": true }, { "label": "1525", "checked": false }, { "label": "1830", "checked": false }, { "label": "2440", "checked": false } ] },
+            { "id": "f52x6tk", "type": "check", "label": "Hauteur spéciale", "checked": false }
+          ],
+          "span": 1,
+          "marginTop": 0,
+          "marginBottom": 0.2,
+          "pageBreakBefore": false
+        },
+        {
+          "id": "s58e4q9",
+          "name": "Matériaux panneau de portes",
+          "fields": [
+            { "id": "f54ayyb", "type": "check", "label": "Bois verni", "checked": true },
+            { "id": "f55pfec", "type": "check", "label": "Stratifié", "checked": false },
+            { "id": "f56879z", "type": "check", "label": "Acier peint", "checked": false },
+            { "id": "f570ttd", "type": "check", "label": "Aluminium", "checked": false }
+          ],
+          "span": 1,
+          "marginTop": 0,
+          "marginBottom": 0,
+          "pageBreakBefore": false
+        }
+      ],
+      "marginTop": 0,
+      "marginBottom": 0,
+      "pageBreakBefore": false
+    },
+    {
+      "id": "S66noz7",
+      "name": "Mobilier intégré",
+      "subgroups": [
+        {
+          "id": "s63frmb",
+          "name": "Armoires",
+          "fields": [
+            { "id": "f603pzw", "type": "check", "label": "Armoire haute", "checked": false },
+            { "id": "f61mcac", "type": "check", "label": "Armoire pleine hauteur", "checked": true },
+            { "id": "f62x6xq", "type": "check", "label": "Tablettes murales", "checked": false }
+          ],
+          "span": 1,
+          "marginTop": 0,
+          "marginBottom": 0.2,
+          "pageBreakBefore": false
+        },
+        {
+          "id": "s65w4xa",
+          "name": "Commentaires",
+          "fields": [
+            { "id": "f647kyx", "type": "note", "label": "", "text": "Prévoir un rail lève-personne plafonnier dans chaque chambre." }
+          ],
+          "span": 2,
+          "marginTop": 0,
+          "marginBottom": 0,
+          "pageBreakBefore": false
+        }
+      ],
+      "marginTop": 0,
+      "marginBottom": 0,
+      "pageBreakBefore": false
+    },
+    {
+      "id": "S69aore",
+      "name": "Finis",
+      "subgroups": [
+        {
+          "id": "s68sf09",
+          "name": "Liste des finis",
+          "fields": [
+            { 
+              "id": "f67ip8f", 
+              "type": "table", 
+              "label": "", 
+              "columns": [ "Nom", "Numéro", "Catégorie" ], 
+              "rows": [ 
+                [ "Peinture", "F.MU.001", "Finis muraux" ],
+                [ "Revêtement de sol souple", "F.PC.001", "Finis de planchers" ],
+                [ "Carreaux acoustiques", "F.PF.004", "Finis de plafonds" ],
+                [ "Protection murale", "F.PM.001", "Protections murales" ],
+                [ "Remontée", "F.PT.001", "Plinthes" ]
+              ] 
+            }
+          ],
+          "span": 3,
+          "marginTop": 0,
+          "marginBottom": 0,
+          "pageBreakBefore": false
+        }
+      ],
+      "marginTop": 0,
+      "marginBottom": 0,
+      "pageBreakBefore": false
+    },
+    {
+      "id": "S76an3w",
+      "name": "Gaz médicaux",
+      "subgroups": [
+        {
+          "id": "s73a3wn",
+          "name": "Prises de gaz",
+          "fields": [
+            { "id": "f706rp9", "type": "qty", "label": "Air médical (AM)", "checked": true, "qty": "1", "unit": "Qté", "note": "Console murale" },
+            { "id": "f71qrfe", "type": "qty", "label": "Oxygène (O2)", "checked": true, "qty": "2", "unit": "Qté", "note": "Console murale" },
+            { "id": "f727l38", "type": "qty", "label": "Aspiration médicale (ASP)", "checked": true, "qty": "2", "unit": "Qté", "note": "Console murale" }
+          ],
+          "span": 2,
+          "marginTop": 0,
+          "marginBottom": 0.2,
+          "pageBreakBefore": false
+        },
+        {
+          "id": "s755gkt",
+          "name": "Commentaire",
+          "fields": [
+            { "id": "f74cow4", "type": "note", "label": "", "text": "Hyp. : nombre de civières : 1" }
+          ],
+          "span": 1,
+          "marginTop": 0,
+          "marginBottom": 0,
+          "pageBreakBefore": false
+        }
+      ],
+      "marginTop": 0,
+      "marginBottom": 0,
+      "pageBreakBefore": false
+    },
+    {
+      "id": "S84rxby",
+      "name": "Électricité",
+      "subgroups": [
+        {
+          "id": "s80y4g6",
+          "name": "Éclairage DEL",
+          "fields": [
+            { "id": "f77dxrx", "type": "check", "label": "Patient - examen", "checked": true },
+            { "id": "f78q4yb", "type": "check", "label": "Patient - lecture", "checked": true },
+            { "id": "f79tsxb", "type": "check", "label": "Veilleuse", "checked": true }
+          ],
+          "span": 1,
+          "marginTop": 0,
+          "marginBottom": 0.2,
+          "pageBreakBefore": false
+        },
+        {
+          "id": "s83jshi",
+          "name": "Prises",
+          "fields": [
+            { "id": "f819zs0", "type": "qty", "label": "Prise sur normal (hôpital)", "checked": true, "qty": "6", "unit": "Qté", "note": "" },
+            { "id": "f82wnir", "type": "qty", "label": "Prise sur urgence (hôpital)", "checked": true, "qty": "6", "unit": "Qté", "note": "" }
+          ],
+          "span": 2,
+          "marginTop": 0,
+          "marginBottom": 0,
+          "pageBreakBefore": false
+        }
+      ],
+      "marginTop": 0,
+      "marginBottom": 0,
+      "pageBreakBefore": false
+    },
+    {
+      "id": "S87a0qa",
+      "name": "Équipements",
+      "subgroups": [
+        {
+          "id": "s868t9o",
+          "name": "Liste des équipements",
+          "fields": [
+            { 
+              "id": "f85wgyl", 
+              "type": "table", 
+              "label": "", 
+              "columns": [ "Nom", "Numéro", "Catégorie" ], 
+              "rows": [ 
+                [ "Moteur lève-patient", "F-LPSR", "GBM" ],
+                [ "Lit électrique", "S-LEH", "GBM" ],
+                [ "Chaise pliante", "M-CP", "MAO" ],
+                [ "Poste informatique", "I-PTCL", "TIC" ]
+              ] 
+            }
+          ],
+          "span": 3,
+          "marginTop": 0,
+          "marginBottom": 0,
+          "pageBreakBefore": false
+        }
+      ],
+      "marginTop": 0,
+      "marginBottom": 0,
+      "pageBreakBefore": false
+    }
+  ]
+};
+}
+
+// ====== ÉTAT ======
+let state = buildExample();
+let isFinal = false;
+let filter = "";
+let drag = null;
+let metaDragData = null;
+let undoStack = [], redoStack = [];
+const MAX_UNDO = 50;
+const $ = id => document.getElementById(id);
+const wrap = $("sectionsWrap");
+
+// ====== PERSISTANCE ======
+function hasStore(){ try{ return typeof window.storage !== "undefined" && window.storage } catch(e){ return false } }
+async function persist(){ if(!hasStore()) return; try{ await window.storage.set("plan-exemple-v11", JSON.stringify(state), false) } catch(e){} }
+function commit(){ saveUndoState(); render(); persist(); }
+function saveUndoState(){ const s=JSON.stringify(state); if(undoStack.length===0||undoStack[undoStack.length-1]!==s){ undoStack.push(s); if(undoStack.length>MAX_UNDO) undoStack.shift(); redoStack=[] } }
+function undo(){ if(undoStack.length<=1) return; redoStack.push(undoStack.pop()); state=JSON.parse(undoStack[undoStack.length-1]); render(); persist(); }
+function redo(){ if(redoStack.length===0) return; undoStack.push(redoStack.pop()); state=JSON.parse(undoStack[undoStack.length-1]); render(); persist(); }
+
+// ====== UTILITAIRES ======
+let tt=null;
+function toast(msg,kind){ const t=$("toast"); t.className=""; t.classList.add("show"); if(kind) t.classList.add(kind); const icons={err:"exclamation-circle", ok:"check-circle", warn:"exclamation-triangle"}; const icon=icons[kind]||"info-circle"; t.innerHTML='<i class="fas fa-'+icon+'"></i> '+msg; clearTimeout(tt); tt=setTimeout(()=>t.classList.remove("show"),3000); }
+function esc(s){ return String(s==null?"":s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#39;"); }
+function slug(s){ return String(s||"").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/[^a-z0-9]+/g,"-").replace(/^-+|-+$/g,"").slice(0,40)||"fiche"; }
+function today(){ const d=new Date(); return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0"); }
+function debounce(fn,ms=300){ let timer; return (...args)=>{ clearTimeout(timer); timer=setTimeout(()=>fn(...args),ms); }; }
+function findSub(id){ for(const s of state.sections){ const g=s.subgroups.find(x=>x.id===id); if(g) return {section:s, sub:g}; } return null; }
+function findFieldLoc(fid){ for(const s of state.sections){ for(const g of s.subgroups){ const i=g.fields.findIndex(f=>f.id===fid); if(i>-1) return {section:s, sub:g, idx:i, field:g.fields[i]}; } } return null; }
+function editText(el,current,onSave,opts){ opts=opts||{}; const input=document.createElement(opts.multiline?"textarea":"input"); input.value=current; input.className=opts.multiline?"inline-area":"inline-input"; if(!opts.multiline) input.style.minWidth=Math.max(60, current.length*8+22)+"px"; el.replaceWith(input); input.focus(); if(!opts.multiline) input.select(); let done=false; const fin=(save)=>{ if(done) return; done=true; if(save){ onSave(input.value); commit(); } else { render(); } }; input.addEventListener("blur", ()=>fin(true)); input.addEventListener("keydown", (e)=>{ if(e.key==="Enter" && !opts.multiline){ e.preventDefault(); fin(true); } if(e.key==="Enter" && opts.multiline && (e.ctrlKey||e.metaKey)){ e.preventDefault(); fin(true); } if(e.key==="Escape"){ e.preventDefault(); fin(false); } }); }
+function matchField(f,q){ if(!q) return true; const hay=[f.label,f.value,f.note,f.text].filter(Boolean).join(" ").toLowerCase(); if(hay.includes(q)) return true; if(f.options && f.options.some(o=>o.label.toLowerCase().includes(q))) return true; if(f.columns && f.columns.join(" ").toLowerCase().includes(q)) return true; if(f.rows && f.rows.some(r=>r.join(" ").toLowerCase().includes(q))) return true; return false; }
+
+// ====== RENDU ======
+function renderHeader(){
+    $("hOrg").textContent=state.meta.org||""; $("hTitle").textContent=state.meta.title||"Fiche technique"; $("hProjet").textContent=state.meta.projet||""; $("hFicheId").textContent=state.meta.ficheId||""; $("hRoom").textContent=state.meta.room||"";
+    const bind=(id,key,fb)=>{ const el=$(id); el.onclick=function(){ editText(this, state.meta[key]||"", v=>state.meta[key]=v.trim()||fb ); }; };
+    bind("hOrg","org",""); bind("hTitle","title","Fiche"); bind("hProjet","projet",""); bind("hFicheId","ficheId",""); bind("hRoom","room","");
+    const grid=$("idGrid"); grid.innerHTML=""; grid.className="id-grid cols-"+(state.meta.gridCols||3);
+    document.querySelectorAll(".grid-btn").forEach(btn=>{ btn.classList.remove("active"); if(parseInt(btn.dataset.cols)===(state.meta.gridCols||3)) btn.classList.add("active"); });
+    state.meta.id.forEach((cell,idx)=>{ const d=document.createElement("div"); d.className="id-cell"; d.dataset.idx=idx; d.draggable=!isFinal; const h=document.createElement("span"); h.className="drag-handle"; h.innerHTML='<i class="fas fa-grip-vertical"></i>'; d.appendChild(h); const k=document.createElement("span"); k.className="k edit-tag"; k.textContent=cell.k; if(!isFinal) k.onclick=function(e){ e.stopPropagation(); editText(this, cell.k, v=>cell.k=v.trim()||"Champ"); }; d.appendChild(k); const v=document.createElement("span"); v.className="v edit-tag"; v.textContent=cell.v||"—"; if(!isFinal) v.onclick=function(e){ e.stopPropagation(); editText(this, cell.v, v=>cell.v=v.trim()||"—"); }; d.appendChild(v); if(!isFinal){ const a=document.createElement("div"); a.className="cell-actions"; const del=document.createElement("button"); del.innerHTML='<i class="fas fa-times"></i>'; del.onclick=(e)=>{ e.stopPropagation(); state.meta.id.splice(idx,1); commit(); }; a.appendChild(del); d.appendChild(a); } grid.appendChild(d); if(!isFinal){ d.addEventListener("dragstart", (e)=>{ metaDragData={fromIdx:idx}; e.dataTransfer.setData("text/plain",String(idx)); d.classList.add("dragging"); }); d.addEventListener("dragend", ()=>{ d.classList.remove("dragging"); document.querySelectorAll(".id-cell.drag-over").forEach(el=>el.classList.remove("drag-over")); metaDragData=null; }); d.addEventListener("dragover", (e)=>{ e.preventDefault(); if(metaDragData && metaDragData.fromIdx!==idx) d.classList.add("drag-over"); }); d.addEventListener("dragleave", ()=>d.classList.remove("drag-over")); d.addEventListener("drop", (e)=>{ e.preventDefault(); d.classList.remove("drag-over"); if(!metaDragData || metaDragData.fromIdx===idx) return; const [moved]=state.meta.id.splice(metaDragData.fromIdx,1); state.meta.id.splice(idx,0,moved); metaDragData=null; commit(); }); } });
+    renderImage();
+    // Synchroniser les champs globaux avec l'état (toujours actifs)
+    const sync = (id, key) => {
+        const el = $(id);
+        if (el) {
+            el.value = state.meta[key] !== undefined ? state.meta[key] : 0;
+            el.oninput = function() {
+                state.meta[key] = parseFloat(this.value) || 0;
+                if (isFinal) { $("finalView").innerHTML = buildFinal(); }
+                commit();
+            };
+        }
+    };
+    sync("printMargin", "printMargin");
+    sync("coverTop", "coverMarginTop");
+    sync("coverBottom", "coverMarginBottom");
+    sync("globalSecTop", "globalSecTop");
+    sync("globalSecBottom", "globalSecBottom");
+    sync("globalSubTop", "globalSubTop");
+    sync("globalSubBottom", "globalSubBottom");
+    // Synchroniser la note de couverture
+    const noteInput = $("coverNoteInput");
+    if (noteInput) {
+        noteInput.value = state.meta.coverNote || "";
+        noteInput.oninput = function() {
+            state.meta.coverNote = this.value;
+            if (isFinal) { $("finalView").innerHTML = buildFinal(); }
+            commit();
+        };
+    }
+}
+function setupGridHandlers(){ document.querySelectorAll(".grid-btn").forEach(btn=>{ btn.onclick=()=>{ if(isFinal) return; state.meta.gridCols=parseInt(btn.dataset.cols); commit(); }; }); $("addMetaBtn").onclick=()=>{ if(isFinal) return; state.meta.id.push({k:"Nouveau", v:"—"}); commit(); const cells=document.querySelectorAll(".id-cell"); if(cells[state.meta.id.length-1]){ const le=cells[state.meta.id.length-1].querySelector(".k"); if(le) le.click(); } }; }
+function renderImage(){ const p=$("imgPreview"), e=$("imgEmptyMsg"), r=$("removeImageBtn"); const d=state.meta.image||""; if(d && d.startsWith("data:image")){ p.src=d; p.style.display="block"; e.style.display="none"; r.style.display="inline-block"; } else { p.style.display="none"; e.style.display="inline"; r.style.display="none"; } }
+
+// ====== GESTION IMAGE (TOUJOURS ACTIF) ======
+function setupImageHandlers(){ 
+    const uploadBtn = $("uploadImageBtn");
+    const removeBtn = $("removeImageBtn");
+    const input = $("imageInput");
+    const loadImage = (file) => {
+        if(!file) return;
+        if(!file.type.startsWith("image/")){ toast("Pas une image","err"); return; }
+        if(file.size>2*1024*1024){ toast("Trop volumineux (max 2 Mo)","err"); return; }
+        const r=new FileReader();
+        r.onload=ev=>{ state.meta.image=ev.target.result; commit(); if(isFinal){ $("finalView").innerHTML = buildFinal(); } };
+        r.readAsDataURL(file);
+    };
+    uploadBtn.onclick = function(e){ e.stopPropagation(); input.click(); };
+    input.onchange = function(e){ const f=e.target.files[0]; if(f) loadImage(f); e.target.value=""; };
+    removeBtn.onclick = function(){ if(confirm("Supprimer l'image ?")){ state.meta.image=""; commit(); if(isFinal){ $("finalView").innerHTML = buildFinal(); } } };
+    const zone = $("imageZone");
+    zone.addEventListener("dragover", (e)=>{ e.preventDefault(); });
+    zone.addEventListener("drop", (e)=>{ e.preventDefault(); const f=e.dataTransfer.files[0]; if(f) loadImage(f); });
+}
+
+function renderField(field,subId){ const el=document.createElement("div"); el.className="field"; el.dataset.fid=field.id; el.draggable=!isFinal&&!filter; const drg=document.createElement("span"); drg.className="fdrag"; drg.innerHTML='<i class="fas fa-grip-vertical"></i>'; el.appendChild(drg); const body=document.createElement("div"); body.className="fbody"; buildFieldBody(body,field); el.appendChild(body); if(!isFinal){ const act=document.createElement("div"); act.className="factions"; const sel=document.createElement("select"); sel.className="fmove"; state.sections.forEach(s=>{ const og=document.createElement("optgroup"); og.label=s.name; s.subgroups.forEach(g=>{ const o=document.createElement("option"); o.value=g.id; o.textContent=g.name; if(g.id===subId) o.selected=true; og.appendChild(o); }); sel.appendChild(og); }); sel.onchange=()=>{ if(sel.value!==subId) moveField(field.id, sel.value); }; act.appendChild(sel); const del=document.createElement("button"); del.innerHTML='<i class="fas fa-trash-alt"></i>'; del.onclick=()=>{ const loc=findFieldLoc(field.id); if(loc){ loc.sub.fields.splice(loc.idx,1); commit(); if(isFinal){ $("finalView").innerHTML = buildFinal(); } } }; act.appendChild(del); el.appendChild(act); el.addEventListener("dragstart", (e)=>{ drag={fid:field.id, subId}; el.classList.add("dragging"); try{ e.dataTransfer.setData("text/plain","x"); } catch(x){} }); el.addEventListener("dragend", ()=>{ el.classList.remove("dragging"); clearDragMarks(); drag=null; }); el.addEventListener("dragover", (e)=>{ e.preventDefault(); if(drag) el.classList.add("drag-over-item"); }); el.addEventListener("dragleave", ()=>el.classList.remove("drag-over-item")); el.addEventListener("drop", (e)=>onFieldDrop(e, field.id, subId, el)); } return el; }
+
+function buildFieldBody(body,field){ const ro=isFinal; const ls=(text,cls,onSave)=>{ const s=document.createElement("span"); s.className=cls; s.textContent=text; if(!ro&&onSave) s.onclick=function(){ editText(this, text, onSave); }; return s; }; if(field.type==="text"){ body.appendChild(ls((field.label||"—")+" :","f-label", v=>field.label=v.trim())); body.appendChild(ls(field.value||"—","f-value", v=>field.value=v.trim())); } else if(field.type==="check"){ body.appendChild(checkbox(field.checked, ()=>{ field.checked=!field.checked; commit(); if(isFinal){ $("finalView").innerHTML = buildFinal(); } })); body.appendChild(ls(field.label||"—","f-label", v=>field.label=v.trim())); } else if(field.type==="qty"){ body.appendChild(checkbox(field.checked, ()=>{ field.checked=!field.checked; commit(); if(isFinal){ $("finalView").innerHTML = buildFinal(); } })); body.appendChild(ls((field.label||"—")+" :","f-label", v=>field.label=v.trim())); body.appendChild(ls(field.qty||"0","qty-pill", v=>field.qty=v.trim())); const u=document.createElement("span"); u.className="qty-unit"; u.textContent=field.unit||"Qté"; if(!ro){ u.onclick=function(){ editText(this, field.unit||"", v=>field.unit=v.trim()); }; } body.appendChild(u); if(field.note||!ro){ const n=ls(field.note||"note…","qty-unit edit-tag", v=>field.note=v.trim()); n.style.fontStyle="italic"; body.appendChild(n); } } else if(field.type==="choice"){ body.appendChild(ls((field.label||"—")+" :","f-label", v=>field.label=v.trim())); field.options.forEach((op,oi)=>{ const chip=document.createElement("span"); chip.className="opt"; chip.appendChild(checkbox(op.checked, ()=>{ op.checked=!op.checked; commit(); if(isFinal){ $("finalView").innerHTML = buildFinal(); } })); const ol=document.createElement("span"); ol.className="opt-label"; ol.textContent=op.label; if(!ro) ol.onclick=function(){ editText(this, op.label, v=>op.label=v.trim()||"Option"); }; chip.appendChild(ol); if(!ro){ const od=document.createElement("button"); od.className="opt-del"; od.innerHTML='<i class="fas fa-times"></i>'; od.onclick=()=>{ field.options.splice(oi,1); commit(); if(isFinal){ $("finalView").innerHTML = buildFinal(); } }; chip.appendChild(od); } body.appendChild(chip); }); if(!ro){ const add=document.createElement("button"); add.className="add-opt"; add.innerHTML='<i class="fas fa-plus"></i>'; add.onclick=()=>{ field.options.push({label:"Option", checked:false}); commit(); if(isFinal){ $("finalView").innerHTML = buildFinal(); } }; body.appendChild(add); } } else if(field.type==="note"){ if(field.label||!ro) body.appendChild(ls(field.label?(field.label+" :"):"(sans libellé)","f-label", v=>field.label=v.trim())); const n=document.createElement("div"); n.className="f-note-text"; n.textContent=field.text||"—"; if(!ro) n.onclick=function(){ editText(this, field.text||"", v=>field.text=v, {multiline:true}); }; body.appendChild(n); } else if(field.type==="table"){ body.appendChild(renderTable(field, ro)); } }
+
+function checkbox(on,onClick){ const b=document.createElement("button"); b.className="chk"+(on?"":" off"); b.innerHTML='<i class="'+(on?"fas fa-check-square":"far fa-square")+'"></i>'; if(!isFinal) b.onclick=onClick; else b.disabled=true; return b; }
+
+function renderTable(field,ro){ const w=document.createElement("div"); w.className="f-table"; const t=document.createElement("table"); const th=document.createElement("thead"); const hr=document.createElement("tr"); field.columns.forEach((c,ci)=>{ const h=document.createElement("th"); const lab=document.createElement("span"); lab.className="th-label"; lab.textContent=c; if(!ro) lab.onclick=function(){ editText(this, c, v=>field.columns[ci]=v.trim()||"Colonne"); }; h.appendChild(lab); if(!ro&&field.columns.length>1){ const cd=document.createElement("button"); cd.className="col-del"; cd.innerHTML='<i class="fas fa-times"></i>'; cd.onclick=()=>{ field.columns.splice(ci,1); field.rows.forEach(r=>r.splice(ci,1)); commit(); if(isFinal){ $("finalView").innerHTML = buildFinal(); } }; h.appendChild(cd); } hr.appendChild(h); }); if(!ro){ const h=document.createElement("th"); h.style.width="24px"; hr.appendChild(h); } th.appendChild(hr); t.appendChild(th); const tb=document.createElement("tbody"); field.rows.forEach((row,ri)=>{ const tr=document.createElement("tr"); field.columns.forEach((c,ci)=>{ const td=document.createElement("td"); td.textContent=row[ci]!=null?row[ci]:""; if(!ro) td.onclick=function(){ editText(this, row[ci]||"", v=>{ row[ci]=v.trim(); }); }; tr.appendChild(td); }); if(!ro){ const td=document.createElement("td"); const rd=document.createElement("button"); rd.className="row-del"; rd.innerHTML='<i class="fas fa-trash-alt"></i>'; rd.onclick=()=>{ field.rows.splice(ri,1); commit(); if(isFinal){ $("finalView").innerHTML = buildFinal(); } }; td.appendChild(rd); tr.appendChild(td); } tb.appendChild(tr); }); t.appendChild(tb); w.appendChild(t); if(!ro){ const tools=document.createElement("div"); tools.className="table-tools"; const ar=document.createElement("button"); ar.innerHTML='<i class="fas fa-plus"></i> Ligne'; ar.onclick=()=>{ field.rows.push(field.columns.map(()=>"")); commit(); if(isFinal){ $("finalView").innerHTML = buildFinal(); } }; const ac=document.createElement("button"); ac.innerHTML='<i class="fas fa-plus"></i> Colonne'; ac.onclick=()=>{ field.columns.push("Colonne"); field.rows.forEach(r=>r.push("")); commit(); if(isFinal){ $("finalView").innerHTML = buildFinal(); } }; tools.appendChild(ar); tools.appendChild(ac); w.appendChild(tools); } return w; }
+
+function renderSub(section,sub){ const q=filter.trim().toLowerCase(); const box=document.createElement("div"); box.className="subgroup span-"+(sub.span||1); box.dataset.subId=sub.id; const head=document.createElement("div"); head.className="sub-head"; const name=document.createElement("span"); name.className="sub-name"; name.textContent=sub.name; if(!isFinal) name.onclick=function(){ editText(this, sub.name, v=>sub.name=v.trim()||"Sous-groupe"); }; head.appendChild(name); if(!isFinal){
+    const tools=document.createElement("div"); tools.className="sub-tools";
+    const ss=document.createElement("select"); ss.className="sub-span";
+    [1,2,3].forEach(s=>{ const o=document.createElement("option"); o.value=s; o.textContent=s+" col"; if(sub.span===s) o.selected=true; ss.appendChild(o); });
+    ss.onchange=()=>{ sub.span=parseInt(ss.value); commit(); if(isFinal){ $("finalView").innerHTML = buildFinal(); } }; tools.appendChild(ss);
+    const sel=document.createElement("select"); sel.className="sub-move";
+    state.sections.forEach(s=>{ const o=document.createElement("option"); o.value=s.id; o.textContent=s.name; if(s.id===section.id) o.selected=true; sel.appendChild(o); });
+    sel.onchange=()=>{ if(sel.value!==section.id) moveSub(sub.id, sel.value); }; tools.appendChild(sel);
+    const sp=document.createElement("span"); sp.className="sub-spacing";
+    sp.innerHTML = ' <label>↑</label><input type="number" class="sub-mt" value="'+(sub.marginTop||0)+'" step="0.1" min="0" max="3"> <label>↓</label><input type="number" class="sub-mb" value="'+(sub.marginBottom||0)+'" step="0.1" min="0" max="3"> ';
+    const mtInp = sp.querySelector('.sub-mt'), mbInp = sp.querySelector('.sub-mb');
+    mtInp.onchange = ()=>{ sub.marginTop = parseFloat(mtInp.value)||0; commit(); if(isFinal){ $("finalView").innerHTML = buildFinal(); } };
+    mbInp.onchange = ()=>{ sub.marginBottom = parseFloat(mbInp.value)||0; commit(); if(isFinal){ $("finalView").innerHTML = buildFinal(); } };
+    tools.appendChild(sp);
+    const pb = document.createElement("button");
+    pb.className = "page-break-btn" + (sub.pageBreakBefore ? " active" : "");
+    pb.innerHTML = '<i class="fas fa-arrow-right"></i> ⏏️';
+    pb.title = "Saut de page avant ce sous-groupe";
+    pb.onclick = ()=>{ sub.pageBreakBefore = !sub.pageBreakBefore; commit(); if(isFinal){ $("finalView").innerHTML = buildFinal(); } };
+    tools.appendChild(pb);
+    const idx=section.subgroups.indexOf(sub);
+    tools.appendChild(iconBtn("fa-chevron-up","",idx===0, ()=>moveInArray(section.subgroups, idx, -1)));
+    tools.appendChild(iconBtn("fa-chevron-down","",idx===section.subgroups.length-1, ()=>moveInArray(section.subgroups, idx, 1)));
+    tools.appendChild(iconBtn("fa-trash-alt","",false, ()=>{ if(confirm('Supprimer « '+sub.name+' » ?')){ section.subgroups=section.subgroups.filter(x=>x!==sub); commit(); if(isFinal){ $("finalView").innerHTML = buildFinal(); } } }, true));
+    head.appendChild(tools);
+} box.appendChild(head); const fields=document.createElement("div"); fields.className="fields"; fields.dataset.subId=sub.id; if(sub.fields.length===0){ const e=document.createElement("div"); e.className="empty-msg"; e.textContent="Aucun champ"; fields.appendChild(e); } else { sub.fields.forEach(f=>{ if(q&&!matchField(f,q)) return; fields.appendChild(renderField(f, sub.id)); }); } if(!isFinal&&!q){ fields.addEventListener("dragover", (e)=>{ e.preventDefault(); if(drag) fields.classList.add("drag-over"); }); fields.addEventListener("drop", (e)=>onListDrop(e, sub.id, fields)); } box.appendChild(fields); if(!isFinal){ const foot=document.createElement("div"); foot.className="sub-foot"; const add=document.createElement("button"); add.className="add-field"; add.innerHTML='<i class="fas fa-plus"></i> Champ'; add.onclick=(e)=>openTypePicker(e.currentTarget, sub); foot.appendChild(add); box.appendChild(foot); } return box; }
+
+function render(){
+    renderHeader();
+    wrap.innerHTML="";
+    const q=filter.trim().toLowerCase();
+    state.sections.forEach((section,sIdx)=>{
+        const sec=document.createElement("div"); sec.className="section";
+        if(q && !section.subgroups.some(g=>g.fields.some(f=>matchField(f,q)))) sec.classList.add("dim");
+        const head=document.createElement("div"); head.className="section-head";
+        const name=document.createElement("span"); name.className="s-name"; name.textContent=section.name;
+        if(!isFinal) name.onclick=function(){ editText(this, section.name, v=>section.name=v.trim()||"Section"); };
+        head.appendChild(name);
+        const cnt=document.createElement("span"); cnt.className="s-count"; cnt.textContent=section.subgroups.length+" s-g"; head.appendChild(cnt);
+        if(!isFinal){
+            const tools=document.createElement("div"); tools.className="section-tools";
+            const as=document.createElement("button"); as.className="add-sub"; as.innerHTML='<i class="fas fa-plus"></i> Sous-groupe'; as.onclick=()=>{ const g=SG("Nouveau",[],1,0,0,false); section.subgroups.push(g); commit(); if(isFinal){ $("finalView").innerHTML = buildFinal(); } }; tools.appendChild(as);
+            const sp=document.createElement("span"); sp.className="section-spacing";
+            sp.innerHTML = ' <label>↑</label><input type="number" class="sec-mt" value="'+(section.marginTop||0)+'" step="0.1" min="0" max="5"> <label>↓</label><input type="number" class="sec-mb" value="'+(section.marginBottom||0)+'" step="0.1" min="0" max="5"> ';
+            const mtInp = sp.querySelector('.sec-mt'), mbInp = sp.querySelector('.sec-mb');
+            mtInp.onchange = ()=>{ section.marginTop = parseFloat(mtInp.value)||0; commit(); if(isFinal){ $("finalView").innerHTML = buildFinal(); } };
+            mbInp.onchange = ()=>{ section.marginBottom = parseFloat(mbInp.value)||0; commit(); if(isFinal){ $("finalView").innerHTML = buildFinal(); } };
+            tools.appendChild(sp);
+            const pb = document.createElement("button");
+            pb.className = "page-break-btn" + (section.pageBreakBefore ? " active" : "");
+            pb.innerHTML = '<i class="fas fa-arrow-right"></i> ⏏️';
+            pb.title = "Saut de page avant cette section";
+            pb.onclick = ()=>{ section.pageBreakBefore = !section.pageBreakBefore; commit(); if(isFinal){ $("finalView").innerHTML = buildFinal(); } };
+            tools.appendChild(pb);
+            tools.appendChild(iconBtn("fa-chevron-up","", sIdx===0, ()=>moveInArray(state.sections, sIdx, -1)));
+            tools.appendChild(iconBtn("fa-chevron-down","", sIdx===state.sections.length-1, ()=>moveInArray(state.sections, sIdx, 1)));
+            tools.appendChild(iconBtn("fa-trash-alt","", false, ()=>{ if(confirm('Supprimer « '+section.name+' » ?')){ state.sections=state.sections.filter(x=>x!==section); commit(); if(isFinal){ $("finalView").innerHTML = buildFinal(); } } }, true));
+            head.appendChild(tools);
+        }
+        sec.appendChild(head);
+        const body=document.createElement("div"); body.className="section-body";
+        section.subgroups.forEach(sub=>body.appendChild(renderSub(section, sub)));
+        sec.appendChild(body);
+        wrap.appendChild(sec);
+    });
+    setupGridHandlers();
+    updatePrintMargin();
+}
+
+function iconBtn(icon,title,disabled,onClick,danger){ const b=document.createElement("button"); b.title=title; b.innerHTML='<i class="fas '+icon+'"></i>'; b.disabled=!!disabled; if(danger) b.className="danger"; if(!disabled) b.onclick=onClick; return b; }
+function moveInArray(arr,i,dir){ const j=i+dir; if(j<0||j>=arr.length) return; const t=arr[i]; arr[i]=arr[j]; arr[j]=t; commit(); if(isFinal){ $("finalView").innerHTML = buildFinal(); } }
+function moveField(fid,tid){ const loc=findFieldLoc(fid), dst=findSub(tid); if(!loc||!dst) return; const [m]=loc.sub.fields.splice(loc.idx,1); dst.sub.fields.push(m); commit(); if(isFinal){ $("finalView").innerHTML = buildFinal(); } }
+function moveSub(sid,tid){ const loc=findSub(sid), tgt=state.sections.find(s=>s.id===tid); if(!loc||!tgt) return; loc.section.subgroups=loc.section.subgroups.filter(x=>x.id!==sid); tgt.subgroups.push(loc.sub); commit(); if(isFinal){ $("finalView").innerHTML = buildFinal(); } }
+function clearDragMarks(){ document.querySelectorAll(".drag-over-item,.drag-over").forEach(e=>e.classList.remove("drag-over-item","drag-over")); }
+function onFieldDrop(e,tfid,tsid,el){ e.preventDefault(); el.classList.remove("drag-over-item"); if(!drag) return; const src=findFieldLoc(drag.fid), dst=findSub(tsid); if(!src||!dst) return; const [m]=src.sub.fields.splice(src.idx,1); let ins=dst.sub.fields.findIndex(f=>f.id===tfid); if(ins===-1) ins=dst.sub.fields.length; dst.sub.fields.splice(ins,0,m); drag=null; commit(); if(isFinal){ $("finalView").innerHTML = buildFinal(); } }
+function onListDrop(e,tsid,list){ e.preventDefault(); list.classList.remove("drag-over"); if(!drag||e.target.closest(".field")) return; const src=findFieldLoc(drag.fid), dst=findSub(tsid); if(!src||!dst) return; const [m]=src.sub.fields.splice(src.idx,1); dst.sub.fields.push(m); drag=null; commit(); if(isFinal){ $("finalView").innerHTML = buildFinal(); } }
+
+let pop=null;
+function closePop(){ if(pop){ pop.remove(); pop=null; document.removeEventListener("click", outside); } }
+function outside(e){ if(pop&&!pop.contains(e.target)) closePop(); }
+function openTypePicker(anchor,sub){ closePop(); pop=document.createElement("div"); pop.className="type-pop"; const TYPES=[{t:"text",icon:"fa-font",label:"Texte"},{t:"check",icon:"fa-check-square",label:"Case à cocher"},{t:"qty",icon:"fa-hashtag",label:"Quantité"},{t:"choice",icon:"fa-list-ul",label:"Choix"},{t:"note",icon:"fa-align-left",label:"Note"},{t:"table",icon:"fa-table",label:"Tableau"}]; TYPES.forEach(ty=>{ const b=document.createElement("button"); b.innerHTML='<i class="fas '+ty.icon+'"></i> '+ty.label; b.onclick=()=>{ addFieldOfType(sub, ty.t); closePop(); }; pop.appendChild(b); }); document.body.appendChild(pop); const r=anchor.getBoundingClientRect(); pop.style.left=(window.scrollX+r.left)+"px"; pop.style.top=(window.scrollY+r.bottom+5)+"px"; setTimeout(()=>document.addEventListener("click", outside), 0); }
+function addFieldOfType(sub,t){ let f; if(t==="text") f=F.text("Nouveau",""); else if(t==="check") f=F.check("Case",false); else if(t==="qty") f=F.qty("Qté",false,0,"","Qté"); else if(t==="choice") f=F.choice("Choix",[["Option 1",false]]); else if(t==="note") f=F.note("",""); else if(t==="table") f=F.table(["Colonne 1"],[[""]]); sub.fields.push(f); commit(); if(isFinal){ $("finalView").innerHTML = buildFinal(); } }
+
+// ====== SAUVEGARDE / CHARGEMENT ======
+function saveGabarit(){ state.version=11; const blob=new Blob([JSON.stringify(state,null,2)], {type:"application/json"}); const url=URL.createObjectURL(blob); const a=document.createElement("a"); a.href=url; a.download=slug(state.meta.ficheId)+"-"+slug(state.meta.room||state.meta.title)+".json"; document.body.appendChild(a); a.click(); a.remove(); setTimeout(()=>URL.revokeObjectURL(url),1500); }
+function loadGabaritFile(file){ const r=new FileReader(); r.onload=()=>{ try{ const p=JSON.parse(r.result); if(!p||!p.meta||!Array.isArray(p.sections)) throw new Error("format"); p.meta.id=Array.isArray(p.meta.id)?p.meta.id:[]; p.meta.image=p.meta.image||""; if(!p.meta.gridCols) p.meta.gridCols=3; p.meta.coverMarginTop = p.meta.coverMarginTop ?? 0; p.meta.coverMarginBottom = p.meta.coverMarginBottom ?? 0; p.meta.globalSecTop = p.meta.globalSecTop ?? 0; p.meta.globalSecBottom = p.meta.globalSecBottom ?? 0; p.meta.globalSubTop = p.meta.globalSubTop ?? 0; p.meta.globalSubBottom = p.meta.globalSubBottom ?? 0; p.meta.coverNote = p.meta.coverNote || ""; p.sections.forEach(s=>{ s.id=s.id||uid("S"); s.subgroups=Array.isArray(s.subgroups)?s.subgroups:[]; s.subgroups.forEach(g=>{ g.id=g.id||uid("s"); g.fields=Array.isArray(g.fields)?g.fields:[]; g.fields.forEach(f=>{ f.id=f.id||uid("f"); }); if(!g.span) g.span=1; if(g.marginTop===undefined) g.marginTop=0; if(g.marginBottom===undefined) g.marginBottom=0; if(g.pageBreakBefore===undefined) g.pageBreakBefore=false; }); if(s.marginTop===undefined) s.marginTop=0; if(s.marginBottom===undefined) s.marginBottom=0; if(s.pageBreakBefore===undefined) s.pageBreakBefore=false; }); exitFinal(); state=p; commit(); } catch(err){ toast("Fichier invalide","err"); } }; r.onerror=()=>toast("Erreur lecture","err"); r.readAsText(file); }
+function newFiche(){ if(!confirm("Créer une fiche vierge ?")) return; exitFinal(); state={ version:11, meta:{ org:"MSDL", title:"Fiche technique de programmation", projet:"HÔPITAL", ficheId:"Codification", room:"Local", gridCols:3, id:[{k:"Nom", v:"—"},{k:"No", v:"—"},{k:"Date", v: new Date().getFullYear()+"-"+String(new Date().getMonth()+1).padStart(2,"0")+"-"+String(new Date().getDate()).padStart(2,"0")+" "+String(new Date().getHours()).padStart(2,"0")+":"+String(new Date().getMinutes()).padStart(2,"0")}], image:"", coverMarginTop:0, coverMarginBottom:0, globalSecTop:0, globalSecBottom:0, globalSubTop:0, globalSubBottom:0, coverNote:"" }, sections:[SEC("Nouvelle section", [SG("Sous-groupe 1", [], 1, 0, 0, false)], 0, 0, false)] }; commit(); }
+function resetExample(){ if(!confirm("Recharger l'exemple ?")) return; exitFinal(); state=buildExample(); commit(); }
+
+// ====== APERÇU FINAL ======
+function fieldToFinalHtml(f){ const box=(on)=>on?"☑":"☐"; if(f.type==="text") return '<div class="fx-line"><span class="k">'+esc(f.label)+' :</span> <span class="v">'+esc(f.value||"—")+'</span></div>'; if(f.type==="check") return '<div class="fx-line">'+box(f.checked)+' <span class="k">'+esc(f.label)+'</span></div>'; if(f.type==="qty") return '<div class="fx-line">'+box(f.checked)+' <span class="k">'+esc(f.label)+' :</span> <span class="v">'+esc(f.qty||"0")+'</span> '+esc(f.unit||"Qté")+'</div>'; if(f.type==="choice") return '<div class="fx-line"><span class="k">'+esc(f.label)+' :</span> '+f.options.map(o=>box(o.checked)+' '+esc(o.label)).join(' ')+'</div>'; if(f.type==="note") return '<div class="fx-note">'+esc(f.text||"—")+'</div>'; if(f.type==="table"){ return '<div class="fx-table"><table><thead><tr>'+f.columns.map(c=>'<th>'+esc(c)+'</th>').join("")+'</tr></thead><tbody>'+f.rows.map(r=>'<tr>'+f.columns.map((c,i)=>'<td>'+esc(r[i]||"")+'</td>').join("")+'</tr>').join("")+'</tbody></table></div>'; } return ""; }
+
+function buildFinal(){ 
+    const m=state.meta; 
+    
+    // Date et heure automatiques pour le PDF
+    const now = new Date();
+    const autoDateTime = now.getFullYear() + "-" + 
+        String(now.getMonth()+1).padStart(2,"0") + "-" + 
+        String(now.getDate()).padStart(2,"0") + " " + 
+        String(now.getHours()).padStart(2,"0") + ":" + 
+        String(now.getMinutes()).padStart(2,"0");
+
+    // Mise à jour automatique du champ "Date" dans les métadonnées
+    const dateField = m.id.find(x => x.k.toLowerCase() === "date" || x.k.toLowerCase().includes("date"));
+    if (dateField) {
+        dateField.v = autoDateTime;
+    } else {
+        m.id.push({k: "Date", v: autoDateTime});
+    }
+
+    const metaHtml=m.id.map(c=>'<span><b>'+esc(c.k)+' :</b> '+esc(c.v||"—")+'</span>').join(' '); 
+    
+    // En-tête d'impression : MSDL, Fiche technique de programmation, HÔPITAL à gauche
+    // Codification et Local à droite
+    const headerHtml='<div class="print-header"><div class="ph-top"><span class="ph-left" style="line-height:1.2;">MSDL<br>'+esc(m.title)+'<br>'+esc(m.projet)+'</span><span class="ph-right" style="text-align:right;line-height:1.2;"><b>'+esc(m.ficheId)+'</b><br>'+esc(m.room)+'</span></div></div>';
+    
+let html=headerHtml; 
+    const ct = (m.coverMarginTop||0)*10;
+    const cb = (m.coverMarginBottom||0)*10;
+    html+='<div class="fx-cover" style="padding-top:'+ct+'px;padding-bottom:'+cb+'px;min-height:70vh;display:flex;flex-direction:column;align-items:center;justify-content:center;">';
+    html+='<div class="cover-title">'+esc(m.title)+'</div>';
+    // Affichage de Codification et Local sur la couverture aussi pour être sûr
+    html+='<div class="cover-sub">'+esc(m.ficheId)+' - '+esc(m.room)+'</div>';
+    if(m.image&&m.image.startsWith("data:image")){ 
+        html+='<img class="cover-image" src="'+esc(m.image)+'" style="max-width:70%;max-height:55vh;width:auto;height:auto;object-fit:contain;border-radius:12px;border:1px solid #ddd;margin:0.3rem auto;" />'; 
+    } else {
+        html+='<div style="color:#ccc;font-size:0.9rem;padding:1.5rem;"><i class="fas fa-image" style="font-size:2.5rem;display:block;margin-bottom:0.3rem;"></i>Aucune image</div>';
+    }
+    const note = m.coverNote || "Ce dessin est présenté à titre indicatif uniquement. Il constitue une base de réflexion interne et ne doit pas être interprété comme un document définitif pour les projets en cours.";
+    html+='<div class="cover-note">'+esc(note)+'</div>';
+    html+='</div><div class="fx-content">';
+    const gst = (m.globalSecTop||0)*10;
+    const gsb = (m.globalSecBottom||0)*10;
+    const gsubT = (m.globalSubTop||0)*10;
+    const gsubB = (m.globalSubBottom||0)*10;
+    state.sections.forEach((s,sIdx)=>{ 
+        const mt = ((s.marginTop||0)*10) + gst;
+        const mb = ((s.marginBottom||0)*10) + gsb;
+        const pbClass = s.pageBreakBefore ? ' break-before' : '';
+        html+='<div class="fx-section'+pbClass+'" style="margin-top:'+mt+'px;margin-bottom:'+mb+'px;"><h3>'+esc(s.name)+'</h3><div class="fx-body">'; 
+        s.subgroups.forEach(g=>{ 
+            const span=g.span||1; 
+            const gmt = ((g.marginTop||0)*10) + gsubT;
+            const gmb = ((g.marginBottom||0)*10) + gsubB;
+            const gpb = g.pageBreakBefore ? ' break-before' : '';
+            html+='<div class="fx-sub span-'+span+gpb+'" style="margin-top:'+gmt+'px;margin-bottom:'+gmb+'px;"><h4>'+esc(g.name)+'</h4><div class="fx-sub-content">'; 
+            g.fields.forEach(f=>{ html+=fieldToFinalHtml(f); }); 
+            html+='</div></div>'; 
+        }); 
+        html+='</div></div>'; 
+    }); 
+    html+='</div>'; 
+    return html; 
+}
+
+function showFinal(){ isFinal=true; $("finalizeBtn").disabled=true; $("printBtn").style.display="inline-flex"; $("statusBadge").innerHTML='<i class="fas fa-check-circle"></i> Aperçu'; $("statusBadge").classList.add("final"); $("addSectionBtn").style.display="none"; $("finalView").innerHTML=buildFinal(); $("finalView").classList.add("active"); document.body.classList.add("mode-final"); render(); $("finalView").scrollIntoView({behavior:"smooth"}); updatePrintMargin(); }
+function exitFinal(){ isFinal=false; $("finalizeBtn").disabled=false; $("printBtn").style.display="none"; $("statusBadge").innerHTML='<i class="fas fa-pencil-alt"></i> Édition'; $("statusBadge").classList.remove("final"); $("addSectionBtn").style.display="flex"; $("finalView").classList.remove("active"); document.body.classList.remove("mode-final"); }
+
+function updatePrintMargin(){ const val=parseFloat($("printMargin").value)||2.5; document.body.style.setProperty('--print-margin-top', val+'cm'); }
+
+// ====== BOUTONS ======
+$("saveBtn").onclick=saveGabarit;
+$("loadBtn").onclick=()=>$("fileInput").click();
+$("fileInput").onchange=(e)=>{ const f=e.target.files[0]; if(f) loadGabaritFile(f); e.target.value=""; };
+$("newBtn").onclick=newFiche;
+$("exampleBtn").onclick=resetExample;
+$("finalizeBtn").onclick=showFinal;
+$("printBtn").onclick=()=>window.print();
+$("addSectionBtn").onclick=()=>{ const s=SEC("Nouvelle section", [SG("Sous-groupe 1", [], 1, 0, 0, false)], 0, 0, false); state.sections.push(s); commit(); if(isFinal){ $("finalView").innerHTML = buildFinal(); } };
+$("undoBtn").onclick=undo;
+$("redoBtn").onclick=redo;
+
+const ds=debounce((v)=>{ filter=v; render(); },300);
+$("searchInput").oninput=(e)=>{ ds(e.target.value); };
+
+document.addEventListener("keydown", (e)=>{ if(e.ctrlKey&&e.key==="z"&&!e.shiftKey){ e.preventDefault(); undo(); } if((e.ctrlKey&&e.key==="z"&&e.shiftKey)||(e.ctrlKey&&e.key==="y")){ e.preventDefault(); redo(); } if(e.ctrlKey&&e.key==="s"){ e.preventDefault(); saveGabarit(); } });
+document.addEventListener("dragover", (e)=>e.preventDefault());
+document.addEventListener("drop", (e)=>e.preventDefault());
+window.addEventListener("resize", closePop);
+
+// ====== INITIALISATION ======
+render();
+setupImageHandlers();
+setupGridHandlers();
+setInterval(()=>{ persist(); }, 30000);
+
+})();
+</script>
+</body>
+</html>
